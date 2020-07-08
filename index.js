@@ -1,39 +1,22 @@
-import Class from './src/Class.js'
-import Object from './src/Object.js'
-import JObject from './src/JObject.js'
-import JPanel from './src/JPanel.js'
-import JForm from './src/JForm.js'
-import JButton from './src/JButton.js'
-import JLabel from './src/JLabel.js'
-import JTick from './src/JTick.js'
-import JAudio from './src/JAudio.js'
-import JMessageBox from './src/JMessageBox.js'
-import JAnimationBox from './src/JAnimationBox.js'
-import JPictureBox from './src/JPictureBox.js'
-import JPreLoad from './src/JPreLoad.js'
-import JFunction from './src/JFunction.js'
-import JBase64 from './src/JBase64.js'
-import JColor from './src/JColor.js'
-import JMain from './src/JMain.js'
 
 let JClass = {
-    Class:Class,
-    Object:Object,
-    JObject:JObject,
-    JPanel:JPanel,
-    JForm:JForm,
-    JButton:JButton,
-    JLabel:JLabel,
-    JTick:JTick,
-    JAudio:JAudio,
-    JMessageBox:JMessageBox,
-    JAnimationBox:JAnimationBox,
-    JPictureBox:JPictureBox,
-    JPreLoad:JPreLoad,
-    JBase64:JBase64,
-    JFunction:JFunction,
-    JColor:JColor,
-    JMain:JMain
+    Class:require('./src/Class.js'),
+    Object:require('./src/Object.js'),
+    JObject:require('./src/JObject.js'),
+    JPanel:require('./src/JPanel.js'),
+    JForm:require('./src/JForm.js'),
+    JButton:require('./src/JButton.js'),
+    JLabel:require('./src/JLabel.js'),
+    JTick:require('./src/JTick.js'),
+    JAudio:require('./src/JAudio.js'),
+    JMessageBox:require('./src/JMessageBox.js'),
+    JAnimationBox:require('./src/JAnimationBox.js'),
+    JPictureBox:require('./src/JPictureBox.js'),
+    JPreLoad:require('./src/JPreLoad.js'),
+    JBase64:require('./src/JBase64.js'),
+    JFunction:require('./src/JFunction.js'),
+    JColor:require('./src/JColor.js'),
+    JMain:require('./src/JMain.js')
 }
 
 module.exports = JClass;

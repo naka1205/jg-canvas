@@ -1,5 +1,5 @@
-import Class from './Class.js'
 
+let Class = require('./Class.js')
 let JTick = {};
 
 JTick = Class.create({

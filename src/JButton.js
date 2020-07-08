@@ -1,6 +1,6 @@
-import Class from './Class.js'
-import JObject from './JObject.js'
 
+let Class = require('./Class.js')
+let JObject = require('./JObject.js')
 let JButton = {};
 
 JButton = Class.create(JObject, {

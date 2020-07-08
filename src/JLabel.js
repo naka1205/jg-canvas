@@ -1,6 +1,6 @@
-import Class from './Class.js'
-import JObject from './JObject.js'
 
+let Class = require('./Class.js')
+let JObject = require('./JObject.js')
 let JLabel = {};
 
 JLabel = Class.create(JObject, {//从父类继承
