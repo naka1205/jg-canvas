@@ -1,5 +1,4 @@
 const path = require('path');
-const uglifyjsPlugin = require('uglifyjs-webpack-plugin');  //js压缩
 
 module.exports = {
     //入口文件的配置项
@@ -26,14 +25,5 @@ module.exports = {
             }
         ]
 
-    },
-    //插件，用于生产模版和各项功能
-    plugins: [
-        new uglifyjsPlugin({
-            mangle: {
-                // 关键词过滤
-                except: ['$super', '$', 'exports', 'require']
-            }
-        })
-    ]
+    }
 }

@@ -1,1 +1,1578 @@
-!function(t){function i(o){if(e[o])return e[o].exports;var n=e[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,i),n.l=!0,n.exports}var e={};i.m=t,i.c=e,i.d=function(exports,t,e){i.o(exports,t)||Object.defineProperty(exports,t,{configurable:!1,enumerable:!0,get:e})},i.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return i.d(e,"a",e),e},i.o=function(t,i){return Object.prototype.hasOwnProperty.call(t,i)},i.p="",i(i.s=2)}([function(t,exports,i){"use strict";window.$A=function(t){if(!t)return[];if(t.toArray)return t.toArray();for(var i=t.length||0,e=new Array(i);i--;)e[i]=t[i];return e};var e={};e={create:function(){function t(){this.initialize.apply(this,arguments)}var i=null,o=$A(arguments);if(Object.isFunction(o[0])&&(i=o.shift()),Object.extend(t,e.Methods),t.superclass=i,t.subclasses=[],i){var n=function(){};n.prototype=i.prototype,t.prototype=new n,i.subclasses.push(t)}for(var s=0;s<o.length;s++)t.addMethods(o[s]);return t.prototype.initialize||(t.prototype.initialize=Prototype.emptyFunction),t.prototype.constructor=t,t}},e.Methods={addMethods:function(t){var i=this.superclass&&this.superclass.prototype,e=Object.keys(t);Object.keys({toString:!0}).length||e.push("toString","valueOf");for(var o=0,n=e.length;o<n;o++){var s=e[o],a=t[s];if(i&&Object.isFunction(a)&&"$super"==a.argumentNames().first()){var r=a;a=function(t){return function(){return i[t].apply(this,arguments)}}(s).wrap(r),a.valueOf=r.valueOf.bind(r),a.toString=r.toString.bind(r)}this.prototype[s]=a}return this}},t.exports=e},function(t,exports,i){"use strict";var e=i(0),o={};o=e.create({ID:null,position:null,alpha:null,moveStep:null,canMove:!0,size:null,blockAngle:null,rotationStep:null,blockInvert:null,BGColor:null,BGColorAlpha:null,BGImage:null,BGImageAlpha:null,BGImagePosition:null,BGImageSize:null,focus:null,controls:null,parent:null,relativePosition:null,enabled:null,visible:null,showImageData:null,isHighLight:null,onFocus:null,onClick:null,onMouseDown:null,onMouseUp:null,onKeyDown:null,onKeyUp:null,keyCode:null,initialize:function(t,i){this.ID=JMain.JID++,this.position=t,this.size=i||{width:0,height:0},this.BGColorAlpha=1,this.BGImageAlpha=1,this.moveStep={x:0,y:0},this.fontColor=JColor.black,this.textPos={x:0,y:0},this.alpha=1,this.relativePosition=t||{x:0,y:0},this.controls=[],this.parent=null,this.enabled=!0,this.visible=!0},setSize:function(t){return this.size=t,this},setBGColor:function(t){return this.BGColor=t,this},setBGImage:function(t){return this.BGImage=t.data,this.BGImagePosition={x:0,y:0},this.BGImageSize={width:t.cellSize.width,height:t.cellSize.height},this},setKeyCode:function(t){return this.keyCode=t,this},setRelativePosition:function(t){return this.relativePosition=t,this},setFocus:function(){JMain.JFocusControl&&JMain.JFocusControl.lostFocus(),this.focus=!0,JMain.JFocusControl=this,this.onFocus&&this.onFocus()},lostFocus:function(){this.focus=!1,JMain.JFocusControl=null},pointInBlock:function(t,i){return i||(i=this),t.x>=i.position.x&&t.x<i.position.x+i.size.width&&t.y>=i.position.y&&t.y<i.position.y+i.size.height},onControlClick:function(){if(!this.visible||!this.enabled)return!1;for(var t=this.controls.length-1;t>=0;t--)if(this.controls[t].pointInBlock(JMain.JForm.mousePosition,this.controls[t])&&this.controls[t].onControlClick.call(this.controls[t]))return!0;return!(!this.onClick||!this.onClick(JMain.JForm.mousePosition))},onControlMouseDown:function(){if(!this.visible||!this.enabled)return!1;for(var t=this.controls.length-1;t>=0;t--)if(this.controls[t].pointInBlock(JMain.JForm.mousePosition,this.controls[t])&&this.controls[t].onControlMouseDown.call(this.controls[t]))return!0;return!(!this.onMouseDown||!this.onMouseDown())},onControlMouseUp:function(){if(!this.visible||!this.enabled)return!1;for(var t=this.controls.length-1;t>=0;t--)if(this.controls[t].pointInBlock(JMain.JForm.mousePosition,this.controls[t])&&this.controls[t].onControlMouseUp.call(this.controls[t]))return!0;return!(!this.onMouseUp||!this.onMouseUp())},onControlKeyDown:function(t){if(!this.visible||!this.enabled)return!1;for(var i=this.controls.length-1;i>=0;i--)if(this.controls[i].onControlKeyDown.call(this.controls[i],t))return!0;return!(!this.onKeyDown||!this.onKeyDown(t))},onControlKeyUp:function(t){if(!this.visible||!this.enabled)return!1;for(var i=this.controls.length-1;i>=0;i--)if(this.controls[i].onControlKeyUp.call(this.controls[i],t))return!0;return!(!this.onKeyUp||!this.onKeyUp(t))},addControlInLast:function(t){for(var i=0;i<t.length;i++)if(t[i]){var e=this.controls.length;this.controls[e]=t[i],this.controls[e].parent=this,this.position&&(this.controls[e].position={x:this.position.x+this.controls[e].relativePosition.x,y:this.position.y+this.controls[e].relativePosition.y})}},removeControl:function(t){for(var i=0;i<this.controls.length;i++)if(t==this.controls[i].ID){this.controls.splice(i,1);break}},remove:function(){this.parent?this.parent.removeControl.call(this.parent,this.ID):this.ID=null},clearControls:function(){this.controls=[]},saveShowImageData:function(){var t=parseInt(this.size.width*JMain.JZoom.x),i=parseInt(this.size.height*JMain.JZoom.y),e=this.relativePosition,o=this.parent;this.parent=null,this.relativePosition={x:0,y:0},JMain.JForm.canvas.width=t,JMain.JForm.canvas.height=i,this.showImageData=null,this.show(),this.showImageData=JFunction.getImageData(JMain.JForm.context,this.relativePosition,{width:t,height:i}),this.parent=o,this.relativePosition=e,JMain.JForm.canvas.width=parseInt(JMain.JForm.size.width*JMain.JZoom.x),JMain.JForm.canvas.height=parseInt(JMain.JForm.size.height*JMain.JZoom.y)},beginShow:function(){this.position.x=this.relativePosition.x,this.position.y=this.relativePosition.y,this.parent&&(this.position.x+=this.parent.position.x,this.position.y+=this.parent.position.y)},showing:function(t,i,e,o){for(var n=0;n<this.controls.length;n++)this.controls[n].show.call(this.controls[n]);if(!this.enabled){var s=JFunction.getImageData(JMain.JForm.context,{x:t,y:i},{width:e,height:o});JFunction.drawImageData(JMain.JForm.context,JFunction.changeToGray(s),{x:t,y:i})}},endShow:function(){this.rotationStep&&(this.blockAngle+=this.rotationStep,this.blockAngle=this.blockAngle%360),this.canMove&&this.moveStep&&(this.relativePosition.x+=this.moveStep.x,this.relativePosition.y+=this.moveStep.y)},show:function(){if(this.beginShow(),this.visible&&this.size)if(this.showImageData)JFunction.drawImageData(JMain.JForm.context,this.showImageData,{x:parseInt(this.position.x*JMain.JZoom.x),y:parseInt(this.position.y*JMain.JZoom.y)});else{var t=JMain.JForm.context;if(null==this.ID)return;var i=parseInt(this.position.x*JMain.JZoom.x),e=parseInt(this.position.y*JMain.JZoom.y),o=parseInt(this.size.width*JMain.JZoom.x),n=parseInt(this.size.height*JMain.JZoom.y);t&&(this.alpha<1&&(t.save(),t.globalAlpha=this.alpha),this.blockInvert&&(t.save(),t.translate(i+parseInt(o/2),0),t.scale(-1,1),t.translate(-1*(i+parseInt(o/2)),0)),this.blockAngle&&(t.save(),t.translate(i+parseInt(o/2),e+parseInt(n/2)),i=-parseInt(o/2),e=-parseInt(n/2),t.rotate(this.blockAngle*Math.PI/180)),this.BGColor&&(t.save(),t.globalAlpha=this.alpha*this.BGColorAlpha,t.fillStyle=this.BGColor.data,t.fillRect(i,e,o,n),t.restore()),this.BGImage&&(t.save(),t.globalAlpha=this.alpha*this.BGImageAlpha,t.drawImage(this.BGImage,this.BGImagePosition.x,this.BGImagePosition.y,this.BGImageSize.width,this.BGImageSize.height,i,e,o,n),t.restore()),this.showing&&this.showing(i,e,o,n),this.blockAngle&&t.restore(),this.blockInvert&&(t.translate(JMain.JForm.size.width-i-parseInt(o/2),0),t.scale(-1,1),t.translate(-1*(JMain.JForm.size.width-i-parseInt(o/2)),0),t.restore()),this.alpha<1&&t.restore())}this.endShow()}}),t.exports=o},function(t,exports,i){"use strict";var e={Class:i(0),Object:i(3),JObject:i(1),JPanel:i(4),JForm:i(5),JButton:i(6),JLabel:i(7),JTick:i(8),JAudio:i(9),JMessageBox:i(10),JAnimationBox:i(11),JPictureBox:i(12),JPreLoad:i(13),JBase64:i(14),JFunction:i(15),JColor:i(16),JMain:i(17)};t.exports=e},function(t,exports,i){"use strict";Object.extend=function(t,i){for(var e in i)t[e]=i[e];return t},Object.extend(Object,{keys:function(t){var i=[];for(var e in t)i.push(e);return i},isFunction:function(t){return"function"==typeof t},isUndefined:function(t){return void 0===t}}),Object.extend(Function.prototype,{argumentNames:function(){var t=this.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1].replace(/\s+/g,"").split(",");return 1!=t.length||t[0]?t:[]},bind:function(){if(arguments.length<2&&Object.isUndefined(arguments[0]))return this;var t=this,i=$A(arguments),e=i.shift();return function(){return t.apply(e,i.concat($A(arguments)))}},wrap:function(t){var i=this;return function(){return t.apply(this,[i.bind(this)].concat($A(arguments)))}}}),Object.extend(Array.prototype,{first:function(){return this[0]}}),t.exports=Object},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{closeButton:null,title:null,isShowTitle:null,titleHeight:40,initialize:function($super,t,i){$super(t,i),this.titleHeight=40,this.initTitle(),this.hideTitle()},initTitle:function(){this.isShowTitle=!0,this.title=new JLabel({x:0,y:0}).setSize({width:this.size.width,height:this.titleHeight}).setBGColor(JColor.blue).setFontSize(27).setTextBaseline("middle").setFontType("bold").setTextPos({x:20,y:0}),this.closeButton=new JButton({x:this.size.width-60,y:0},{width:60,height:this.titleHeight}).setBGColor(JColor.white),this.closeButton.text.setText("关闭").setFontColor(JColor.red).setFontSize(22),this.closeButton.onClick=function(){return this.parent.visible=!1,this.parent.onCloseButtonClick&&this.parent.onCloseButtonClick(),!0},this.addControlInLast([this.title,this.closeButton])},hideTitle:function(){if(this.isShowTitle){this.isShowTitle=!1,this.title.visible=!1,this.closeButton.visible=!1;for(var t=0;t<this.controls.length;t++)this.controls[t].relativePosition.y-=this.titleHeight}},showTitle:function(t){if(this.title.setText(t),!this.isShowTitle){for(var i=0;i<this.controls.length;i++)this.controls[i].relativePosition.y+=this.titleHeight;this.isShowTitle=!0,this.title.visible=!0,this.closeButton.visible=!0}},onCloseButtonClick:null,clearControls:function($super){$super(),this.initTitle(),this.hideTitle()}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{context:null,canvas:null,webPosition:null,mousePosition:null,initialize:function($super,t){$super({x:0,y:0},t),this.canvas=document.getElementById("canvas"),this.context=this.canvas.getContext("2d");for(var i=0,e=0,o=this.canvas;null!=o;)i+=o.offsetTop,e+=o.offsetLeft,o=o.offsetParent;this.webPosition={x:e,y:i},this.setFocus(),this.canvas.width=parseInt(this.size.width*JMain.JZoom.x),this.canvas.height=parseInt(this.size.height*JMain.JZoom.y),this.canvas.onclick=function(t){JMain.JForm.mousePosition={x:parseInt((t.pageX-JMain.JForm.webPosition.x)/JMain.JZoom.x),y:parseInt((t.pageY-JMain.JForm.webPosition.y)/JMain.JZoom.y)},JMain.JForm.onControlClick.call(JMain.JForm)},this.canvas.onmousedown=function(t){JMain.JForm.mousePosition={x:parseInt((t.pageX-JMain.JForm.webPosition.x)/JMain.JZoom.x),y:parseInt((t.pageY-JMain.JForm.webPosition.y)/JMain.JZoom.y)},JMain.JForm.onControlMouseDown.call(JMain.JForm)},this.canvas.onmouseup=function(t){JMain.JForm.mousePosition={x:parseInt((t.pageX-JMain.JForm.webPosition.x)/JMain.JZoom.x),y:parseInt((t.pageY-JMain.JForm.webPosition.y)/JMain.JZoom.y)},JMain.JForm.onControlMouseUp.call(JMain.JForm)},this.canvas.addEventListener("touchstart",function(t){t.pageX=t.pageX||t.changedTouches[0].pageX,t.pageY=t.pageY||t.changedTouches[0].pageY,JMain.JForm.mousePosition={x:parseInt((t.pageX-JMain.JForm.webPosition.x)/JMain.JZoom.x),y:parseInt((t.pageY-JMain.JForm.webPosition.y)/JMain.JZoom.y)},JMain.JForm.onControlMouseDown.call(JMain.JForm)}),this.canvas.addEventListener("touchend",function(t){t.pageX=t.pageX||t.changedTouches[0].pageX,t.pageY=t.pageY||t.changedTouches[0].pageY,JMain.JForm.mousePosition={x:parseInt((t.pageX-JMain.JForm.webPosition.x)/JMain.JZoom.x),y:parseInt((t.pageY-JMain.JForm.webPosition.y)/JMain.JZoom.y)},JMain.JForm.onControlMouseUp.call(JMain.JForm)}),document.onkeydown=function(t){t=window.event||t;var i=t.keyCode||t.which;JMain.JForm.onControlKeyDown(i)},document.onkeyup=function(t){t=window.event||t;var i=t.keyCode||t.which;JMain.JForm.onControlKeyUp(i)}}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{text:null,initialize:function($super,t,i){$super(t,i),this.text=new JLabel({x:0,y:0}).setSize(i).setTextBaseline("middle").setTextAlign("center").setFontType("bold").setFontSize(20),this.addControlInLast([this.text])},setText:function(t){return this.text.setText(t),this},setSize:function(t){return t&&(this.size=t,this.text.setSize({width:t.width,height:t.height})),this}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{text:"",textPos:null,fontType:"normal",fontColor:null,textAlign:"left",textBaseline:"top",fontSize:10,isSelect:!1,initialize:function($super,t,i){$super(t,{width:100,height:20}),this.text=i+"",this.textPos={x:2,y:2},this.fontSize=15,this.fontColor=JColor.black},setText:function(t){return this.text=t,this},setTextPos:function(t){return this.textPos=t,this},setFontType:function(t){return this.fontType=t,this},setFontColor:function(t){return this.fontColor=t,this},setTextAlign:function(t){return this.textAlign=t,this},setTextBaseline:function(t){return this.textBaseline=t,this},setFontSize:function(t){return this.fontSize=t,this},showing:function($super,t,i,e,o){$super();var n=JMain.JForm.context;if(this.text){var s=parseFloat(JMain.JZoom.y)+parseFloat(JMain.JZoom.x);n.fillStyle=this.fontColor.data,n.font=this.fontType+" "+parseInt(this.fontSize*s/2)+"px serif",n.textBaseline=this.textBaseline,n.textAlign=this.textAlign;var a,r;"left"==n.textAlign?a=t+parseInt(this.textPos.x*JMain.JZoom.x):"center"==n.textAlign?a=t+parseInt(e/2):"right"==n.textAlign&&(a=t+e-parseInt(this.textPos.x*JMain.JZoom.x)),"top"==n.textBaseline?r=i+parseInt(this.textPos.y*JMain.JZoom.y):"middle"==n.textBaseline?r=i+parseInt(o/2):"bottom"==n.textBaseline&&(r=i+o-parseInt(this.textPos.y*JMain.JZoom.y)),n.fillText(this.text,a,r,this.size.width)}this.isSelect&&(n.strokeStyle=JColor.red.data,n.lineWidth=1,n.strokeRect(t,i,e-n.lineWidth,o-n.lineWidth))}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o={};o=e.create({time:40,fun:[],handle:null,initialize:function(t){this.time=t,this.fun=[],this.handle=null},begin:function(){this.handle=setTimeout(this.runOneTime,this.time)},end:function(){this.handle&&clearTimeout(this.handle)},add:function(t){if(t)for(var i=0;i<t.length;i++)this.fun[this.fun.length]=t[i]},delete:function(t){if(t)for(var i=0;i<this.fun.length;i++)if(this.fun[i].ID==t.ID){for(var e=i;e<this.fun.length-1;e++)this.fun[e]=this.fun[e+1];this.fun.length--}},runOneTime:function(){JMain.JTick.end();for(var t=0;t<JMain.JTick.fun.length;t++)JMain.JTick.fun[t]&&JMain.JTick.fun[t].show.call(JMain.JTick.fun[t]);JMain.JTick.handle=setTimeout(JMain.JTick.runOneTime,JMain.JTick.time)}}),t.exports=o},function(t,exports,i){"use strict";var e=i(0),o={};o=e.create({audioData:null,initialize:function(t,i){this.setAudio(t,i)},setAudio:function(t,i){t&&(this.audioData=t.data,i&&(this.audioData.loop=!0))},play:function(){this.audioData&&this.audioData.play()},pause:function(){this.audioData&&this.audioData.pause()}}),t.exports=o},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{initialize:function($super,t,i,e){e||(e={x:parseInt((JMain.JForm.size.width-t.width)/2),y:parseInt((JMain.JForm.size.height-t.height)/2)}),$super(e,t),this.BGColor=JColor.white,JMain.JForm.addControlInLast([this]);var o=new JLabel({x:0,y:0},"系统提示");o.BGColor=JColor.blue,o.fontColor=JColor.red,o.size.width=t.width,o.size.height=25,o.fontSize=20,o.fontType="bold",this.addControlInLast([o]);for(var n=o.size.height,s=0;s<i.length;s++){var a=new JLabel({x:0,y:n},i[s]);a.size.width=t.width,a.textPos.x=10,n+=a.size.height,this.addControlInLast([a])}this.size.height=n+20},onClick:function(){this.remove.call(this),JMain.JForm.show()}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{animationName:null,animationPlayNum:null,animationTime:null,animationOffset:null,loop:null,stopPlayAnimation:null,initialize:function($super,t,i,e){$super(t,i),this.animationName=e,this.animationPlayNum=0,this.animationTime=0,this.animationOffset={WNum:0,HNum:0},this.loop=!0,this.stopPlayAnimation=!1},showing:function($super,t,i,e,o){if(this.animationName){var n=Resources.Animation[this.animationName],s=Resources.Images[n.imageName],a=s.cellSize.width,r=s.cellSize.height,l=this.animationOffset.times||n.times,h=this.animationOffset.allPlayNum||n.allPlayNum,u=(n.beginPoint.WNum+this.animationOffset.WNum+this.animationPlayNum)%s.picNum.WNum,c=n.beginPoint.HNum+this.animationOffset.HNum+parseInt((n.beginPoint.WNum+this.animationOffset.WNum+this.animationPlayNum)/s.picNum.WNum);JMain.JForm.context.drawImage(s.data,a*u,r*c,a,r,t,i,e,o),this.isHighLight&&(JMain.JForm.context.save(),JMain.JForm.context.globalCompositeOperation="lighter",JMain.JForm.context.globalAlpha=.2*this.alpha,JMain.JForm.context.drawImage(s.data,a*u,r*c,a,r,t,i,e,o),JMain.JForm.context.restore()),this.stopPlayAnimation||this.animationTime++,this.animationTime>=l&&(this.animationPlayNum++,this.animationPlayNum>=h&&(this.loop?this.animationPlayNum=0:this.remove()),this.animationTime=0)}$super(t,i,e,o)},setAnimation:function(t){return this.animationName=t,this}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o=i(1),n={};n=e.create(o,{picture:null,picAlpha:null,picState:null,picPosition:null,picSize:null,initialize:function($super,t,i,e,o){$super(t,i),this.picAlpha=1,this.picState="cut";var n=o||{x:0,y:0};e&&this.setPicture(e,n)},setPicture:function(t,i){return t&&(this.picture=t.data,this.picSize={width:t.cellSize.width,height:t.cellSize.height}),this.picPosition=i||{x:0,y:0},this},showing:function($super,t,i,e,o){var n=JMain.JForm.context;this.picture&&(n.save(),n.globalAlpha=this.alpha*this.picAlpha,"flex"==this.picState?n.drawImage(this.picture,0,0,this.picture.width,this.picture.height,t,i,e,o):"cut"==this.picState&&n.drawImage(this.picture,this.picPosition.x,this.picPosition.y,this.picSize.width,this.picSize.height,t,i,e,o),n.restore()),this.selected&&(n.strokeStyle=JColor.red.data,n.lineWidth=1,n.strokeRect(t+n.lineWidth,i+n.lineWidth,e-2*n.lineWidth,o-2*n.lineWidth)),$super(t,i,e,o)}}),t.exports=n},function(t,exports,i){"use strict";var e=i(0),o={};o=e.create({loadedNum:0,resourceNum:0,imagesNum:0,soundNum:0,mapsNum:0,initialize:function(){console.log("JPreLoad");for(var t in Resources.Images)this.imagesNum++,this.resourceNum++;for(var i in Resources.Sound)this.soundNum++,this.resourceNum++;for(var e in Resources.Maps)this.mapsNum++,this.resourceNum++},loadAll:function(t){t&&(this.loadPost=t),this.loadImage()},loadPost:function(t){console.log("loadPost")},loadEnd:function(){console.log("loadEnd")},imageLoadPost:function(){this.loadedNum++;var t=Math.round(100*parseFloat(this.loadedNum/this.resourceNum));if(this.loadPost(t),this.loadedNum>=this.imagesNum)return void this.loadAudio()},audioLoadPost:function(){this.loadedNum++;var t=Math.round(100*parseFloat(this.loadedNum/this.resourceNum));if(this.loadPost(t),this.loadedNum>=this.imagesNum+this.soundNum)return void this.loadJson()},jsonLoadPost:function(){this.loadedNum++;var t=Math.round(100*parseFloat(this.loadedNum/this.resourceNum));if(this.loadPost(t),this.loadedNum>=this.resourceNum)return this.loadedNum=0,this.resourceNum=0,void this.loadEnd()},loadImage:function(t){var i=this;t&&(this.loadPost=t),0==this.imagesNum?(this.loadedNum--,this.imageLoadPost()):function(){var t=i;for(var e in Resources.Images)Resources.Images[e].data=new Image,Resources.Images[e].data.src=GMain.URL+Resources.Images[e].path,Resources.Images[e].data.onload=function(){t.imageLoadPost()},Resources.Images[e].data.onerror=function(){console.log("资源加载失败！")}}()},loadAudio:function(t){var i=this;t&&(this.loadPost=t),0==this.soundNum?(this.loadedNum--,this.audioLoadPost()):function(){var t=i;for(var e in Resources.Sound)Resources.Sound[e].data=new Audio,""!=Resources.Sound[e].data.canPlayType("video/ogg")?Resources.Sound[e].data.src=GMain.URL+resources.Sound[e].path+resources.Sound[e].soundName+".ogg":Resources.Sound[e].data.src=GMain.URL+resources.Sound[e].path+resources.Sound[e].soundName+".mp3",Resources.Sound[e].data.addEventListener("canplaythrough",function(){t.audioLoadPost()},!1),Resources.Sound[e].data.addEventListener("error",function(){console.log("资源加载失败！")},!1)}()},loadJson:function(t){var i=this;t&&(this.loadPost=t),0==this.mapsNum?(this.loadedNum--,this.jsonLoadPost()):function(){var t=i;for(var e in Resources.Maps)!function(i){var e=new XMLHttpRequest;e.open("get",GMain.URL+Resources.Maps[i].path),e.send(null),e.onload=function(){if(200==e.status){var o=JSON.parse(e.responseText);Resources.Maps[i].data=o,t.jsonLoadPost()}else console.log("资源加载错误！")},e.onerror=function(){console.log("资源加载失败！")}}(e)}()}}),t.exports=o},function(t,exports,i){"use strict";var e={};e._keyStr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",e.encode=function(t){var i="",o=void 0,n=void 0,s=void 0,a=void 0,r=void 0,l=void 0,h=void 0,u=0;for(t=e._utf8_encode(t);u<t.length;)o=t.charCodeAt(u++),n=t.charCodeAt(u++),s=t.charCodeAt(u++),a=o>>2,r=(3&o)<<4|n>>4,l=(15&n)<<2|s>>6,h=63&s,isNaN(n)?l=h=64:isNaN(s)&&(h=64),i=i+e._keyStr.charAt(a)+e._keyStr.charAt(r)+e._keyStr.charAt(l)+e._keyStr.charAt(h);return i},e.decode=function(t){var i="",o=void 0,n=void 0,s=void 0,a=void 0,r=void 0,l=void 0,h=void 0,u=0;for(t=t.replace(/[^A-Za-z0-9+/=]/g,"");u<t.length;)a=e._keyStr.indexOf(t.charAt(u++)),r=e._keyStr.indexOf(t.charAt(u++)),l=e._keyStr.indexOf(t.charAt(u++)),h=e._keyStr.indexOf(t.charAt(u++)),o=a<<2|r>>4,n=(15&r)<<4|l>>2,s=(3&l)<<6|h,i+=String.fromCharCode(o),64!=l&&(i+=String.fromCharCode(n)),64!=h&&(i+=String.fromCharCode(s));return i=e._utf8_decode(i)},e._utf8_encode=function(t){t=t.replace(/rn/g,"n");for(var i="",e=0;e<t.length;e++){var o=t.charCodeAt(e);o<128?i+=String.fromCharCode(o):o>127&&o<2048?(i+=String.fromCharCode(o>>6|192),i+=String.fromCharCode(63&o|128)):(i+=String.fromCharCode(o>>12|224),i+=String.fromCharCode(o>>6&63|128),i+=String.fromCharCode(63&o|128))}return i},e._utf8_decode=function(t){for(var i="",e=0,o=void 0,n=void 0,s=o=n=0;e<t.length;)s=t.charCodeAt(e),s<128?(i+=String.fromCharCode(s),e++):s>191&&s<224?(n=t.charCodeAt(e+1),i+=String.fromCharCode((31&s)<<6|63&n),e+=2):(n=t.charCodeAt(e+1),c3=t.charCodeAt(e+2),i+=String.fromCharCode((15&s)<<12|(63&n)<<6|63&c3),e+=3);return i},t.exports=e},function(t,exports,i){"use strict";var e={};e.IsMobile=function(){var t=navigator.userAgent.toLowerCase(),i="ipad"==t.match(/ipad/i),e="iphone os"==t.match(/iphone os/i),o="midp"==t.match(/midp/i),n="rv:1.2.3.4"==t.match(/rv:1.2.3.4/i),s="ucweb"==t.match(/ucweb/i),a="android"==t.match(/android/i),r="windows ce"==t.match(/windows ce/i),l="windows mobile"==t.match(/windows mobile/i);return!!(i||e||o||n||s||a||r||l)},e.FullScreen=function(){var t=document.documentElement,i=t.requestFullScreen||t.webkitRequestFullScreen||t.mozRequestFullScreen||t.msRequestFullscreen;void 0!==i&&i&&i.call(t)},e.ExitFullScreen=function(){document.exitFullscreen?document.exitFullscreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitCancelFullScreen?document.webkitCancelFullScreen():document.msExitFullscreen&&document.msExitFullscreen(),"undefined"!=typeof cfs&&cfs&&cfs.call(el)},e.IsFullscreen=function(){return document.fullscreenElement||document.msFullscreenElement||document.mozFullScreenElement||document.webkitFullscreenElement||!1},e.GetElementById=function(t){var i=document.getElementById(t);return null!=i&&(i.state=!1,i.show=function(t){this.state=!0,this.style.display="block"},i.hide=function(t){this.state=!1,this.style.display="none"},i.text=function(t){this.innerHTML=t},i.attrbute=function(t,i){if(void 0==i)return this.getAttribute(t);this.setAttribute(t,i)},i.append=function(t){this.appendChild(t)},i.remove=function(t){this.removeChild(t)},i)},e.Random=function(t,i){return parseInt(Math.random()*(i-t+1)+t)},e.setLSData=function(t,i){var e=JSON.stringify(i);window.localStorage.setItem(t,JBase64.encode(e))},e.getLSData=function(t){var i=window.localStorage.getItem(t);return i&&(i=JBase64.decode(window.localStorage.getItem(t))),JSON.parse(i)},e.getNowTime=function(){var t=new Date;return t.getFullYear()+"/"+(t.getMonth()+1)+"/"+t.getDate()+" "+t.getHours()+":"+t.getMinutes()},e.getImageData=function(t,i,e){return t.getImageData(i.x,i.y,e.width,e.height)},e.drawImageData=function(t,i,e,o,n){o||(o={x:0,y:0}),n||(n={width:i.width,height:i.height}),t.putImageData(i,e.x,e.y,o.x,o.y,n.width,n.height)},e.invert=function(t){for(var i=t,e=0;e<i.data.length;e+=4){var o=i.data[e],n=i.data[e+1],s=i.data[e+2],a=i.data[e+3];i.data[e]=255-o,i.data[e+1]=255-n,i.data[e+2]=255-s,i.data[e+3]=a}return i},e.changeToGray=function(t){for(var i=t,e=0;e<i.data.length;e+=4){var o=parseInt((i.data[e]+i.data[e+1]+i.data[e+2])/3);i.data[e]=o,i.data[e+1]=o,i.data[e+2]=o}return i},e.changeToRed=function(t){for(var i=t,e=0;e<i.data.length;e+=4)i.data[e]+=50,i.data[e]>255&&(i.data[e]=255);return i},e.rotate=function(t,i,e){var o=t.createImageData(i.width,i.height),n=void 0,s=void 0,a=void 0,r=void 0,l=void 0,h=void 0,u=void 0,c=i.width/2,d=i.height/-2,m=3.14159;for(s=0;s<o.height;s++)for(n=0;n<o.width;n++)a=4*(i.width*s+n),l=function(t){var i=e*m/180,o=(t.x-c)*Math.cos(i)-(t.y-d)*Math.sin(i),n=(t.x-c)*Math.sin(i)+(t.y-d)*Math.cos(i);return{x:o+c,y:n+d}}({x:n,y:-1*s}),h=parseInt(l.x),u=parseInt(l.y),h>=0&&h<i.width&&-u>=0&&-u<i.height&&(r=4*(i.width*-u+h),o.data[a]=i.data[r],o.data[a+1]=i.data[r+1],o.data[a+2]=i.data[r+2],o.data[a+3]=i.data[r+3]);return o},e.highLight=function(t,i){for(var e=t,o=0;o<e.data.length;o+=4)e.data[o]=e.data[o]+i>255?255:e.data[o]+i,e.data[o+1]=e.data[o+1]+i>255?255:e.data[o+1]+i,e.data[o+2]=e.data[o+2]+i>255?255:e.data[o+2]+i;return e},t.exports=e},function(t,exports,i){"use strict";var e={white:{data:"#FFFFFF",r:255,g:255,b:255},black:{data:"#000000",r:0,g:0,b:0},red:{data:"#cf3a01",r:207,g:58,b:1},green:{data:"#7dbd5d",r:125,g:189,b:93},blue:{data:"#2da0ec",r:45,g:160,b:236},yellow:{data:"#fcce0e",r:252,g:206,b:14},gray:{data:"#b8c7d1",r:184,g:199,b:209}};t.exports=e},function(t,exports,i){"use strict";var e={JZoom:{x:1,y:1},JFocusControl:null,JForm:null,JTick:null,JID:0};t.exports=e}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+window.$A = function (iterable) {
+    if (!iterable) return [];
+    if (iterable.toArray) return iterable.toArray();
+    var length = iterable.length || 0,
+        results = new Array(length);
+    while (length--) {
+        results[length] = iterable[length];
+    }return results;
+};
+
+var Class = {};
+
+Class = {
+    create: function create() {
+        var parent = null,
+            properties = $A(arguments);
+        if (Object.isFunction(properties[0])) parent = properties.shift();
+        function klass() {
+            this.initialize.apply(this, arguments);
+        }
+        Object.extend(klass, Class.Methods);
+        klass.superclass = parent;
+        klass.subclasses = [];
+        if (parent) {
+            var subclass = function subclass() {};
+            subclass.prototype = parent.prototype;
+            klass.prototype = new subclass();
+            parent.subclasses.push(klass);
+        }
+        for (var i = 0; i < properties.length; i++) {
+            klass.addMethods(properties[i]);
+        }if (!klass.prototype.initialize) klass.prototype.initialize = Prototype.emptyFunction;
+        klass.prototype.constructor = klass;
+        return klass;
+    }
+};
+Class.Methods = {
+    addMethods: function addMethods(source) {
+        var ancestor = this.superclass && this.superclass.prototype;
+        var properties = Object.keys(source);
+        if (!Object.keys({ toString: true }).length) properties.push("toString", "valueOf");
+        for (var i = 0, length = properties.length; i < length; i++) {
+            var property = properties[i],
+                value = source[property];
+            if (ancestor && Object.isFunction(value) && value.argumentNames().first() == "$super") {
+                var method = value;
+                value = function (m) {
+                    return function () {
+                        return ancestor[m].apply(this, arguments);
+                    };
+                }(property).wrap(method);
+                value.valueOf = method.valueOf.bind(method);
+                value.toString = method.toString.bind(method);
+            }
+            this.prototype[property] = value;
+        }
+        return this;
+    }
+};
+
+module.exports = Class;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = {};
+
+JObject = Class.create({
+    ID: null, //对象标识，需唯一
+    position: null, //绝对位置{x:0,y:0}
+    alpha: null, //透明度
+    moveStep: null, //移动步伐{x:0,y:0}
+    canMove: true, //是否可移动
+    size: null, //对象长宽{width:0,height:0}
+    blockAngle: null, //旋转角度
+    rotationStep: null, //旋转步伐
+    blockInvert: null, //是否反转
+    BGColor: null, //背景颜色
+    BGColorAlpha: null, //背景颜色透明度
+    BGImage: null, //背景图片
+    BGImageAlpha: null, //背景透明度
+    BGImagePosition: null, //背景图片开始显示位置
+    BGImageSize: null, //背景图片显示的长宽
+    focus: null, //是否为焦点
+    controls: null, //子对象数组
+    parent: null, //父对象
+    relativePosition: null, //与父对象的相对位置
+    enabled: null, //是否为激活状态
+    visible: null, //是否显示
+    showImageData: null, //该对象以及其子对象的缓存图片数据
+    isHighLight: null, //是否高亮
+    onFocus: null, //自定义获取焦点事件
+    onClick: null, //自定义点击事件
+    onMouseDown: null, //自定义鼠标键按下事件
+    onMouseUp: null, //自定义鼠标键弹起事件
+    onKeyDown: null, //自定义键盘按下事件
+    onKeyUp: null, //自定义键盘弹起事件
+    keyCode: null,
+    initialize: function initialize(argP, argWH) {
+        //类构造函数，初始化数据
+        this.ID = JMain.JID++;
+        this.position = argP;
+        if (argWH) {
+            this.size = argWH;
+        } else {
+            this.size = { width: 0, height: 0 };
+        }
+        this.BGColorAlpha = 1.0;
+        this.BGImageAlpha = 1.0;
+        this.moveStep = { x: 0, y: 0 };
+        this.fontColor = JColor.black;
+        this.textPos = { x: 0, y: 0 };
+        this.alpha = 1.0;
+        if (argP) this.relativePosition = argP;else this.relativePosition = { x: 0, y: 0 };
+        this.controls = [];
+        this.parent = null;
+        this.enabled = true;
+        this.visible = true;
+    },
+    setSize: function setSize(size) {
+        //设置宽高
+        this.size = size;
+        return this;
+    },
+    setBGColor: function setBGColor(bgColor) {
+        //设置背景颜色
+        this.BGColor = bgColor;
+        return this;
+    },
+    setBGImage: function setBGImage(image) {
+        //设置背景图片
+        this.BGImage = image.data;
+        this.BGImagePosition = { x: 0, y: 0 };
+        this.BGImageSize = { width: image.cellSize.width, height: image.cellSize.height };
+        // console.log(this.BGImageSize);
+        return this;
+    },
+    setKeyCode: function setKeyCode(keyCode) {
+        this.keyCode = keyCode;
+        return this;
+    },
+    setRelativePosition: function setRelativePosition(relativePosition) {
+        //设置与父对象的相对位置
+        this.relativePosition = relativePosition;
+        return this;
+    },
+    setFocus: function setFocus() {
+        //获取焦点
+        if (JMain.JFocusControl) JMain.JFocusControl.lostFocus();
+        this.focus = true;
+        JMain.JFocusControl = this;
+        if (this.onFocus) this.onFocus();
+    },
+    lostFocus: function lostFocus() {
+        //失去焦点
+        this.focus = false;
+        JMain.JFocusControl = null;
+    },
+    pointInBlock: function pointInBlock(e, _this) {
+        //判断_this对象是否包含坐标e
+        if (!_this) _this = this;
+        if (e.x >= _this.position.x && e.x < _this.position.x + _this.size.width && e.y >= _this.position.y && e.y < _this.position.y + _this.size.height) return true;else return false;
+    },
+    onControlClick: function onControlClick() {
+        //点击对象时，会调用该函数
+        if (!this.visible || !this.enabled) return false;
+        for (var i = this.controls.length - 1; i >= 0; i--) {
+            if (this.controls[i].pointInBlock(JMain.JForm.mousePosition, this.controls[i]) && this.controls[i].onControlClick.call(this.controls[i])) return true;
+        }
+        if (this.onClick && this.onClick(JMain.JForm.mousePosition)) return true; //如果有自定义点击事件并且执行后返回true，则返回true停止递归，结束点击事件
+        else return false; //返回false继续遍历
+    },
+    onControlMouseDown: function onControlMouseDown() {
+        //点击对象时，鼠标键按下会调用该函数
+        if (!this.visible || !this.enabled) return false;
+        for (var i = this.controls.length - 1; i >= 0; i--) {
+            if (this.controls[i].pointInBlock(JMain.JForm.mousePosition, this.controls[i]) && this.controls[i].onControlMouseDown.call(this.controls[i])) return true;
+        }
+        if (this.onMouseDown && this.onMouseDown()) return true;else return false;
+    },
+    onControlMouseUp: function onControlMouseUp() {
+        //点击对象时，鼠标键弹起会调用该函数
+        if (!this.visible || !this.enabled) return false;
+        for (var i = this.controls.length - 1; i >= 0; i--) {
+            if (this.controls[i].pointInBlock(JMain.JForm.mousePosition, this.controls[i]) && this.controls[i].onControlMouseUp.call(this.controls[i])) return true;
+        }
+        if (this.onMouseUp && this.onMouseUp()) return true;
+        return false;
+    },
+    onControlKeyDown: function onControlKeyDown(keyCode) {
+        //键盘按下时，会调用该函数
+        if (!this.visible || !this.enabled) return false;
+        for (var i = this.controls.length - 1; i >= 0; i--) {
+            if (this.controls[i].onControlKeyDown.call(this.controls[i], keyCode)) return true;
+        }
+        if (this.onKeyDown && this.onKeyDown(keyCode)) return true;else return false;
+    },
+    onControlKeyUp: function onControlKeyUp(keyCode) {
+        //键盘弹起时，会调用该函数
+        if (!this.visible || !this.enabled) return false;
+        for (var i = this.controls.length - 1; i >= 0; i--) {
+            if (this.controls[i].onControlKeyUp.call(this.controls[i], keyCode)) return true;
+        }
+        if (this.onKeyUp && this.onKeyUp(keyCode)) return true;else return false;
+    },
+    addControlInLast: function addControlInLast(aObj) {
+        //把对象数组aObj加在子对象数组后面
+        for (var i = 0; i < aObj.length; i++) {
+            if (aObj[i]) {
+                var length = this.controls.length;
+                this.controls[length] = aObj[i];
+                this.controls[length].parent = this;
+                if (this.position) {
+                    this.controls[length].position = { x: this.position.x + this.controls[length].relativePosition.x,
+                        y: this.position.y + this.controls[length].relativePosition.y };
+                }
+            }
+        }
+    },
+    removeControl: function removeControl(objID) {
+        //根据对象名称删除子对象数组中的对象
+        for (var i = 0; i < this.controls.length; i++) {
+            if (objID == this.controls[i].ID) {
+                this.controls.splice(i, 1);
+                break;
+            }
+        }
+    },
+    remove: function remove() {
+        //删除当前对象
+        if (this.parent) {
+            this.parent.removeControl.call(this.parent, this.ID);
+        } else {
+            this.ID = null;
+        }
+    },
+    clearControls: function clearControls() {
+        //清空子对象数组
+        this.controls = [];
+    },
+    saveShowImageData: function saveShowImageData() {
+        //保存该对象以及其子对象的缓存图片数据
+        var w = parseInt(this.size.width * JMain.JZoom.x),
+            h = parseInt(this.size.height * JMain.JZoom.y);
+        var relativePosition = this.relativePosition;
+        var parent = this.parent;
+        this.parent = null;
+        this.relativePosition = { x: 0, y: 0 };
+        JMain.JForm.canvas.width = w;
+        JMain.JForm.canvas.height = h;
+        this.showImageData = null;
+        this.show();
+        this.showImageData = JFunction.getImageData(JMain.JForm.context, this.relativePosition, { width: w, height: h });
+        this.parent = parent;
+        this.relativePosition = relativePosition;
+        JMain.JForm.canvas.width = parseInt(JMain.JForm.size.width * JMain.JZoom.x);
+        JMain.JForm.canvas.height = parseInt(JMain.JForm.size.height * JMain.JZoom.y);
+    },
+    beginShow: function beginShow() {
+        //显示该对象前执行
+        this.position.x = this.relativePosition.x;
+        this.position.y = this.relativePosition.y;
+        if (this.parent) {
+            this.position.x += this.parent.position.x;
+            this.position.y += this.parent.position.y;
+        }
+    },
+    showing: function showing(x, y, w, h) {
+        //显示该对象时执行
+        for (var member = 0; member < this.controls.length; member++) {
+            this.controls[member].show.call(this.controls[member]);
+        }
+        if (!this.enabled) {
+            var imageData = JFunction.getImageData(JMain.JForm.context, { x: x, y: y }, { width: w, height: h });
+            JFunction.drawImageData(JMain.JForm.context, JFunction.changeToGray(imageData), { x: x, y: y });
+        }
+    },
+    endShow: function endShow() {
+        //显示该对象后执行
+        if (this.rotationStep) {
+            this.blockAngle += this.rotationStep;
+            this.blockAngle = this.blockAngle % 360;
+        }
+        if (this.canMove && this.moveStep) {
+            this.relativePosition.x += this.moveStep.x;
+            this.relativePosition.y += this.moveStep.y;
+        }
+    },
+    show: function show() {
+        //显示该对象
+        this.beginShow();
+        if (this.visible && this.size) {
+            if (this.showImageData) {
+                //如果有缓存数据，直接绘图
+                JFunction.drawImageData(JMain.JForm.context, this.showImageData, { x: parseInt(this.position.x * JMain.JZoom.x), y: parseInt(this.position.y * JMain.JZoom.y) });
+            } else {
+                var _context = JMain.JForm.context;
+                if (this.ID == null) return;
+                var x = parseInt(this.position.x * JMain.JZoom.x);
+                var y = parseInt(this.position.y * JMain.JZoom.y);
+                var w = parseInt(this.size.width * JMain.JZoom.x);
+                var h = parseInt(this.size.height * JMain.JZoom.y);
+                if (_context) {
+                    if (this.alpha < 1) {
+                        //设置画布透明度
+                        _context.save();
+                        _context.globalAlpha = this.alpha;
+                    }
+                    if (this.blockInvert) {
+                        //翻转画布
+                        _context.save();
+                        _context.translate(x + parseInt(w / 2), 0);
+                        _context.scale(-1, 1);
+                        _context.translate((x + parseInt(w / 2)) * -1, 0);
+                    }
+                    if (this.blockAngle) {
+                        //旋转画布
+                        _context.save();
+                        _context.translate(x + parseInt(w / 2), y + parseInt(h / 2));
+                        x = -parseInt(w / 2);
+                        y = -parseInt(h / 2);
+                        _context.rotate(this.blockAngle * Math.PI / 180);
+                    }
+                    if (this.BGColor) {
+                        //绘制背景颜色
+                        _context.save();
+                        _context.globalAlpha = this.alpha * this.BGColorAlpha;
+                        _context.fillStyle = this.BGColor.data;
+                        _context.fillRect(x, y, w, h);
+                        _context.restore();
+                    }
+                    if (this.BGImage) {
+                        //绘制背景图片
+                        _context.save();
+                        _context.globalAlpha = this.alpha * this.BGImageAlpha;
+                        _context.drawImage(this.BGImage, this.BGImagePosition.x, this.BGImagePosition.y, this.BGImageSize.width, this.BGImageSize.height, x, y, w, h);
+                        _context.restore();
+                    }
+                    this.showing && this.showing(x, y, w, h); //如果有showing事件，则执行该事件
+                    if (this.blockAngle) _context.restore(); //如果画布有旋转则恢复到旋转前状态
+                    if (this.blockInvert) {
+                        //如果画布有翻转则恢复到翻转前状态
+                        _context.translate(JMain.JForm.size.width - x - parseInt(w / 2), 0);
+                        _context.scale(-1, 1);
+                        _context.translate((JMain.JForm.size.width - x - parseInt(w / 2)) * -1, 0);
+                        _context.restore();
+                    }
+                    if (this.alpha < 1) _context.restore(); //恢复画布透明度
+                }
+            }
+        }
+        this.endShow();
+    }
+});
+
+module.exports = JObject;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var JClass = {
+    Class: __webpack_require__(0),
+    Object: __webpack_require__(3),
+    JObject: __webpack_require__(1),
+    JPanel: __webpack_require__(4),
+    JForm: __webpack_require__(5),
+    JButton: __webpack_require__(6),
+    JLabel: __webpack_require__(7),
+    JTick: __webpack_require__(8),
+    JAudio: __webpack_require__(9),
+    JMessageBox: __webpack_require__(10),
+    JAnimationBox: __webpack_require__(11),
+    JPictureBox: __webpack_require__(12),
+    JPreLoad: __webpack_require__(13),
+    JBase64: __webpack_require__(14),
+    JFunction: __webpack_require__(15),
+    JColor: __webpack_require__(16),
+    JMain: __webpack_require__(17)
+};
+
+module.exports = JClass;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.extend = function (destination, source) {
+    for (var property in source) {
+        destination[property] = source[property];
+    }return destination;
+};
+
+Object.extend(Object, {
+    keys: function keys(object) {
+        var keys = [];
+        for (var property in object) {
+            keys.push(property);
+        }return keys;
+    },
+    isFunction: function isFunction(object) {
+        return typeof object == "function";
+    },
+    isUndefined: function isUndefined(object) {
+        return typeof object == "undefined";
+    }
+});
+
+Object.extend(Function.prototype, {
+    argumentNames: function argumentNames() {
+        var names = this.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/)[1].replace(/\s+/g, '').split(',');
+        return names.length == 1 && !names[0] ? [] : names;
+    },
+    bind: function bind() {
+        if (arguments.length < 2 && Object.isUndefined(arguments[0])) return this;
+        var __method = this,
+            args = $A(arguments),
+            object = args.shift();
+        return function () {
+            return __method.apply(object, args.concat($A(arguments)));
+        };
+    },
+    wrap: function wrap(wrapper) {
+        var __method = this;
+        return function () {
+            return wrapper.apply(this, [__method.bind(this)].concat($A(arguments)));
+        };
+    }
+});
+
+Object.extend(Array.prototype, {
+    first: function first() {
+        return this[0];
+    }
+});
+
+module.exports = Object;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JPanel = {};
+
+JPanel = Class.create(JObject, { //从父类继承
+    closeButton: null, //关闭按钮
+    title: null, //显示标题的控件
+    isShowTitle: null, //是否显示标题栏
+    titleHeight: 40, //标题栏高度
+    initialize: function initialize($super, argP, argWH) {
+        $super(argP, argWH);
+        this.titleHeight = 40;
+        this.initTitle();
+        this.hideTitle();
+    },
+    initTitle: function initTitle() {
+        this.isShowTitle = true;
+        this.title = new JLabel({ x: 0, y: 0 }).setSize({ width: this.size.width, height: this.titleHeight }).setBGColor(JColor.blue).setFontSize(27).setTextBaseline("middle").setFontType("bold").setTextPos({ x: 20, y: 0 });
+        this.closeButton = new JButton({ x: this.size.width - 60, y: 0 }, { width: 60, height: this.titleHeight }).setBGColor(JColor.white);
+        this.closeButton.text.setText("关闭").setFontColor(JColor.red).setFontSize(22);
+        this.closeButton.onClick = function () {
+            this.parent.visible = false;
+            this.parent.onCloseButtonClick && this.parent.onCloseButtonClick();
+            return true;
+        };
+        this.addControlInLast([this.title, this.closeButton]);
+    },
+    hideTitle: function hideTitle() {
+        if (this.isShowTitle) {
+            this.isShowTitle = false;
+            this.title.visible = false;
+            this.closeButton.visible = false;
+            for (var i = 0; i < this.controls.length; i++) {
+                this.controls[i].relativePosition.y -= this.titleHeight;
+            }
+        }
+    },
+    showTitle: function showTitle(title) {
+        this.title.setText(title);
+        if (!this.isShowTitle) {
+            for (var i = 0; i < this.controls.length; i++) {
+                this.controls[i].relativePosition.y += this.titleHeight;
+            }
+            this.isShowTitle = true;
+            this.title.visible = true;
+            this.closeButton.visible = true;
+        }
+    },
+    onCloseButtonClick: null,
+    clearControls: function clearControls($super) {
+        $super();
+        this.initTitle();
+        this.hideTitle();
+    }
+
+});
+
+module.exports = JPanel;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JForm = {};
+
+JForm = Class.create(JObject, { //从父类继承
+    context: null, //画布环境
+    canvas: null, //画布
+    webPosition: null, //主窗体在Web页面中得位置
+    mousePosition: null, //鼠标在主窗体中得相对坐标
+    initialize: function initialize($super, size) {
+        $super({ x: 0, y: 0 }, size);
+        this.canvas = document.getElementById('canvas');
+        this.context = this.canvas.getContext('2d');
+        var _top = 0,
+            _left = 0;
+        var _op = this.canvas;
+        while (_op != null) {
+            _top += _op.offsetTop;
+            _left += _op.offsetLeft;
+            _op = _op.offsetParent;
+        }
+        this.webPosition = { x: _left, y: _top };
+        this.setFocus(); //默认主窗体获得焦点
+        //创建画布对象
+        this.canvas.width = parseInt(this.size.width * JMain.JZoom.x);
+        this.canvas.height = parseInt(this.size.height * JMain.JZoom.y);
+
+        //为画布添加事件
+        this.canvas.onclick = function (event) {
+            JMain.JForm.mousePosition = { x: parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y: parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y) };
+            JMain.JForm.onControlClick.call(JMain.JForm);
+        };
+
+        this.canvas.onmousedown = function (event) {
+            JMain.JForm.mousePosition = { x: parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y: parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y) };
+            JMain.JForm.onControlMouseDown.call(JMain.JForm);
+        };
+
+        this.canvas.onmouseup = function (event) {
+            JMain.JForm.mousePosition = { x: parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y: parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y) };
+            JMain.JForm.onControlMouseUp.call(JMain.JForm);
+        };
+
+        this.canvas.addEventListener('touchstart', function (event) {
+            event.pageX = event.pageX || event.changedTouches[0].pageX;
+            event.pageY = event.pageY || event.changedTouches[0].pageY;
+            JMain.JForm.mousePosition = { x: parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y: parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y) };
+            JMain.JForm.onControlMouseDown.call(JMain.JForm);
+        });
+
+        this.canvas.addEventListener('touchend', function (event) {
+            event.pageX = event.pageX || event.changedTouches[0].pageX;
+            event.pageY = event.pageY || event.changedTouches[0].pageY;
+            JMain.JForm.mousePosition = { x: parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y: parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y) };
+            JMain.JForm.onControlMouseUp.call(JMain.JForm);
+        });
+
+        document.onkeydown = function (event) {
+            event = window.event || event;
+            var keyCode = event.keyCode || event.which;
+            JMain.JForm.onControlKeyDown(keyCode);
+        };
+
+        document.onkeyup = function (event) {
+            event = window.event || event;
+            var keyCode = event.keyCode || event.which;
+            JMain.JForm.onControlKeyUp(keyCode);
+        };
+    }
+});
+module.exports = JForm;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JButton = {};
+
+JButton = Class.create(JObject, {
+
+    text: null, //Label对象，用于显示按钮上的文字
+    initialize: function initialize($super, argP, argWH) {
+        $super(argP, argWH);
+        //创建Label对象
+        this.text = new JLabel({ x: 0, y: 0 }).setSize(argWH).setTextBaseline("middle").setTextAlign("center").setFontType("bold").setFontSize(20);
+        this.addControlInLast([this.text]); //添加到当前按钮子对象数组中
+    },
+    setText: function setText(text) {
+        this.text.setText(text);
+        return this;
+    },
+    setSize: function setSize(size) {
+        if (size) {
+            this.size = size;
+            this.text.setSize({ width: size.width, height: size.height });
+        }
+        return this;
+    }
+});
+
+module.exports = JButton;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JLabel = {};
+
+JLabel = Class.create(JObject, { //从父类继承
+    text: "", //显示文本
+    textPos: null, //用于调整文字在Label中得位置
+    fontType: "normal", //文字属性,如:"normal","bold"等
+    fontColor: null, //字体颜色
+    textAlign: "left", //水平对齐：left，center，right
+    textBaseline: "top", //竖直对齐：top，middle，bottom
+    fontSize: 10, //字体大小
+    isSelect: false,
+    initialize: function initialize($super, argP, argtext) {
+        //覆盖父类中构造函数
+        $super(argP, { width: 100, height: 20 }); //执行父类中构造函数
+        this.text = argtext + "";
+        this.textPos = { x: 2, y: 2 };
+        this.fontSize = 15;
+        this.fontColor = JColor.black;
+    },
+    setText: function setText(text) {
+        this.text = text;
+        return this;
+    },
+    setTextPos: function setTextPos(textPos) {
+        this.textPos = textPos;
+        return this;
+    },
+    setFontType: function setFontType(type) {
+        this.fontType = type;
+        return this;
+    },
+    setFontColor: function setFontColor(color) {
+        this.fontColor = color;
+        return this;
+    },
+    setTextAlign: function setTextAlign(textAlign) {
+        this.textAlign = textAlign;
+        return this;
+    },
+    setTextBaseline: function setTextBaseline(textBaseline) {
+        this.textBaseline = textBaseline;
+        return this;
+    },
+    setFontSize: function setFontSize(fontSize) {
+        this.fontSize = fontSize;
+        return this;
+    },
+    showing: function showing($super, x, y, w, h) {
+        //覆盖父类中showing方法
+        $super(); //执行父类中showing方法
+        var _context = JMain.JForm.context;
+        if (this.text) {
+            var zoom = parseFloat(JMain.JZoom.y) + parseFloat(JMain.JZoom.x);
+            _context.fillStyle = this.fontColor.data;
+            _context.font = this.fontType + " " + parseInt(this.fontSize * zoom / 2) + "px serif";
+            _context.textBaseline = this.textBaseline;
+            _context.textAlign = this.textAlign;
+            var x1, y1;
+            if (_context.textAlign == "left") {
+                x1 = x + parseInt(this.textPos.x * JMain.JZoom.x);
+            } else if (_context.textAlign == "center") {
+                x1 = x + parseInt(w / 2);
+            } else if (_context.textAlign == "right") {
+                x1 = x + w - parseInt(this.textPos.x * JMain.JZoom.x);
+            }
+            if (_context.textBaseline == "top") {
+                y1 = y + parseInt(this.textPos.y * JMain.JZoom.y);
+            } else if (_context.textBaseline == "middle") {
+                y1 = y + parseInt(h / 2);
+            } else if (_context.textBaseline == "bottom") {
+                y1 = y + h - parseInt(this.textPos.y * JMain.JZoom.y);
+            }
+            _context.fillText(this.text, x1, y1, this.size.width);
+        }
+        if (this.isSelect) {
+            _context.strokeStyle = JColor.red.data;
+            _context.lineWidth = 1;
+            _context.strokeRect(x, y, w - _context.lineWidth, h - _context.lineWidth);
+        }
+    }
+});
+
+module.exports = JLabel;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JTick = {};
+
+JTick = Class.create({
+    time: 40, //间隔时间
+    fun: [], //要循环显示的对象数组
+    handle: null, //句柄
+    initialize: function initialize(time) {
+        this.time = time;
+        this.fun = [];
+        this.handle = null;
+    },
+    begin: function begin() {
+        this.handle = setTimeout(this.runOneTime, this.time);
+    },
+    end: function end() {
+        if (this.handle) clearTimeout(this.handle);
+    },
+    add: function add(obj) {
+        if (obj) {
+            for (var i = 0; i < obj.length; i++) {
+                this.fun[this.fun.length] = obj[i];
+            }
+        }
+    },
+    delete: function _delete(obj) {
+        if (obj) {
+            for (var i = 0; i < this.fun.length; i++) {
+                if (this.fun[i].ID == obj.ID) {
+                    for (var j = i; j < this.fun.length - 1; j++) {
+                        this.fun[j] = this.fun[j + 1];
+                    }
+                    this.fun.length--;
+                }
+            }
+        }
+    },
+    runOneTime: function runOneTime() {
+        JMain.JTick.end();
+        for (var i = 0; i < JMain.JTick.fun.length; i++) {
+            if (JMain.JTick.fun[i]) JMain.JTick.fun[i].show.call(JMain.JTick.fun[i]);
+        }
+        JMain.JTick.handle = setTimeout(JMain.JTick.runOneTime, JMain.JTick.time);
+    }
+});
+
+module.exports = JTick;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JAudio = {};
+
+JAudio = Class.create({
+    audioData: null, //Audio数据
+    initialize: function initialize(audio, loop) {
+        this.setAudio(audio, loop);
+    },
+    setAudio: function setAudio(audio, loop) {
+        if (audio) {
+            this.audioData = audio.data;
+            if (loop) this.audioData.loop = true;
+        }
+    },
+    play: function play() {
+        if (this.audioData) this.audioData.play();
+    },
+    pause: function pause() {
+        if (this.audioData) this.audioData.pause();
+    }
+});
+
+module.exports = JAudio;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JMessageBox = {};
+
+JMessageBox = Class.create(JObject, {
+    initialize: function initialize($super, argWH, argAString, argP) {
+        //如果没有指定显示位置，则居中显示
+        if (!argP) argP = { x: parseInt((JMain.JForm.size.width - argWH.width) / 2), y: parseInt((JMain.JForm.size.height - argWH.height) / 2) };
+        $super(argP, argWH);
+        this.BGColor = JColor.white;
+        JMain.JForm.addControlInLast([this]); //把消息框添加到主窗体内
+        var messageTitle = new JLabel({ x: 0, y: 0 }, "系统提示");
+        messageTitle.BGColor = JColor.blue;
+        messageTitle.fontColor = JColor.red;
+        messageTitle.size.width = argWH.width;
+        messageTitle.size.height = 25;
+        messageTitle.fontSize = 20;
+        messageTitle.fontType = "bold";
+        this.addControlInLast([messageTitle]); //添加消息标题栏
+        var h = messageTitle.size.height;
+        for (var i = 0; i < argAString.length; i++) {
+            //添加消息内容
+            var m = new JLabel({ x: 0, y: h }, argAString[i]);
+            m.size.width = argWH.width;
+            m.textPos.x = 10;
+            h += m.size.height;
+            this.addControlInLast([m]);
+        }
+        this.size.height = h + 20;
+    },
+    onClick: function onClick() {
+        //点击后，删除对象
+        this.remove.call(this);
+        JMain.JForm.show();
+    }
+});
+
+module.exports = JMessageBox;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JAnimationBox = {};
+
+JAnimationBox = Class.create(JObject, {
+    animationName: null, //动画资源key值
+    animationPlayNum: null, //当前要显示的动画图片编号
+    animationTime: null, //每次显示时计数加1
+    animationOffset: null, //偏移量
+    loop: null, //是否循环播放动画
+    stopPlayAnimation: null, //是否暂停播放动画
+    initialize: function initialize($super, argP, argWH, argAnimationName) {
+        $super(argP, argWH);
+        this.animationName = argAnimationName;
+        this.animationPlayNum = 0;
+        this.animationTime = 0;
+        this.animationOffset = { WNum: 0, HNum: 0 };
+        this.loop = true;
+        this.stopPlayAnimation = false;
+    },
+    showing: function showing($super, x, y, w, h) {
+        if (this.animationName) {
+            var animation = Resources.Animation[this.animationName];
+            var image = Resources.Images[animation.imageName];
+            var w1 = image.cellSize.width;
+            var h1 = image.cellSize.height;
+
+            var times = this.animationOffset.times || animation.times;
+            var allPlayNum = this.animationOffset.allPlayNum || animation.allPlayNum;
+
+            var x1 = (animation.beginPoint.WNum + this.animationOffset.WNum + this.animationPlayNum) % image.picNum.WNum;
+            var y1 = animation.beginPoint.HNum + this.animationOffset.HNum + parseInt((animation.beginPoint.WNum + this.animationOffset.WNum + this.animationPlayNum) / image.picNum.WNum);
+
+            JMain.JForm.context.drawImage(image.data, w1 * x1, h1 * y1, w1, h1, x, y, w, h);
+            if (this.isHighLight) {
+                //绘制高亮图片
+                JMain.JForm.context.save();
+                JMain.JForm.context.globalCompositeOperation = "lighter";
+                JMain.JForm.context.globalAlpha = this.alpha * 0.2;
+                JMain.JForm.context.drawImage(image.data, w1 * x1, h1 * y1, w1, h1, x, y, w, h);
+                JMain.JForm.context.restore();
+            }
+            if (!this.stopPlayAnimation) {
+                this.animationTime++;
+            }
+
+            if (this.animationTime >= times) {
+                //当计数大于或等于动画次数
+                this.animationPlayNum++; //要显示的动画图片编号加1，
+                if (this.animationPlayNum >= allPlayNum) {
+                    if (this.loop) this.animationPlayNum = 0; //循环播放
+                    else this.remove(); //已播放到末尾，删除该对象
+                }
+                this.animationTime = 0; //重置计数
+            }
+        }
+        $super(x, y, w, h);
+    },
+    setAnimation: function setAnimation(animationName) {
+        //设置动画资源
+        this.animationName = animationName;
+        return this;
+    }
+});
+
+module.exports = JAnimationBox;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JObject = __webpack_require__(1);
+var JPictureBox = {};
+
+JPictureBox = Class.create(JObject, {
+    picture: null, //图片数据
+    picAlpha: null, //t透明度
+    picState: null, //显示方式（flex，cut）
+    picPosition: null, //cut方式下，从该坐标开始截取图片数据
+    picSize: null, //cut方式下，截取图片的长宽
+    initialize: function initialize($super, argP, argWH, argimage, argposition) {
+        $super(argP, argWH);
+
+        this.picAlpha = 1.0;
+        this.picState = "cut";
+
+        var position = argposition || { x: 0, y: 0 };
+        if (argimage) {
+            this.setPicture(argimage, position);
+        }
+    },
+    setPicture: function setPicture(image, position) {
+        //设置该对象图片属性
+        if (image) {
+            this.picture = image.data;
+            this.picSize = { width: image.cellSize.width, height: image.cellSize.height };
+        }
+        if (position) this.picPosition = position;else this.picPosition = { x: 0, y: 0 };
+
+        return this;
+    },
+    showing: function showing($super, x, y, w, h) {
+        //覆盖父类中showing函数
+        var _context = JMain.JForm.context;
+        if (this.picture) {
+            _context.save();
+            _context.globalAlpha = this.alpha * this.picAlpha;
+            if (this.picState == "flex") {
+                _context.drawImage(this.picture, 0, 0, this.picture.width, this.picture.height, x, y, w, h);
+            } else if (this.picState == "cut") {
+                _context.drawImage(this.picture, this.picPosition.x, this.picPosition.y, this.picSize.width, this.picSize.height, x, y, w, h);
+            }
+            _context.restore();
+        }
+        if (this.selected) {
+            _context.strokeStyle = JColor.red.data;
+            _context.lineWidth = 1;
+            _context.strokeRect(x + _context.lineWidth, y + _context.lineWidth, w - _context.lineWidth * 2, h - _context.lineWidth * 2);
+        }
+        $super(x, y, w, h); //执行父类中showing函数
+    }
+});
+
+module.exports = JPictureBox;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Class = __webpack_require__(0);
+var JPreLoad = {};
+
+JPreLoad = Class.create({
+    loadedNum: 0, //已加载资源数量
+    resourceNum: 0, //资源数量
+    imagesNum: 0, //图片资源数量
+    soundNum: 0, //音频资源数量
+    mapsNum: 0, //地图资源数量
+    initialize: function initialize() {
+        console.log('JPreLoad');
+        for (var a in Resources.Images) {
+            this.imagesNum++, this.resourceNum++;
+        }for (var b in Resources.Sound) {
+            this.soundNum++, this.resourceNum++;
+        }for (var c in Resources.Maps) {
+            this.mapsNum++, this.resourceNum++;
+        }
+    },
+    loadAll: function loadAll(f) {
+        //开始加载
+        if (f) this.loadPost = f;
+        this.loadImage();
+    },
+    loadPost: function loadPost(num) {
+        //每成功加载一个资源加载执行一次
+        console.log('loadPost');
+    },
+    loadEnd: function loadEnd() {
+        //资源加载完成后的回调函数
+        console.log('loadEnd');
+    },
+    imageLoadPost: function imageLoadPost() {
+        this.loadedNum++;
+        var value = Math.round(parseFloat(this.loadedNum / this.resourceNum) * 100);
+        this.loadPost(value);
+        if (this.loadedNum >= this.imagesNum) {
+            this.loadAudio();
+            return;
+        }
+    },
+    audioLoadPost: function audioLoadPost() {
+        this.loadedNum++;
+        var value = Math.round(parseFloat(this.loadedNum / this.resourceNum) * 100);
+        this.loadPost(value);
+        if (this.loadedNum >= this.imagesNum + this.soundNum) {
+            this.loadJson();
+            return;
+        }
+    },
+    jsonLoadPost: function jsonLoadPost() {
+        this.loadedNum++;
+        var value = Math.round(parseFloat(this.loadedNum / this.resourceNum) * 100);
+        this.loadPost(value);
+        if (this.loadedNum >= this.resourceNum) {
+            this.loadedNum = 0;
+            this.resourceNum = 0;
+            this.loadEnd();
+            return;
+        }
+    },
+    loadImage: function loadImage(f) {
+        var _this = this;
+
+        //加载图片
+        if (f) this.loadPost = f;
+        if (this.imagesNum == 0) {
+            this.loadedNum--;
+            this.imageLoadPost();
+        } else {
+            (function () {
+                var that = _this;
+                for (var m2 in Resources.Images) {
+                    Resources.Images[m2].data = new Image();
+                    Resources.Images[m2].data.src = GMain.URL + Resources.Images[m2].path;
+                    Resources.Images[m2].data.onload = function () {
+                        that.imageLoadPost();
+                    };
+                    Resources.Images[m2].data.onerror = function () {
+                        console.log("资源加载失败！");
+                        return;
+                    };
+                }
+            })();
+        }
+    },
+    loadAudio: function loadAudio(f) {
+        var _this2 = this;
+
+        //加载声音
+        if (f) this.loadPost = f;
+        if (this.soundNum == 0) {
+            this.loadedNum--;
+            this.audioLoadPost();
+        } else {
+            (function () {
+                var that = _this2;
+                for (var m1 in Resources.Sound) {
+                    Resources.Sound[m1].data = new Audio();
+                    //测试浏览器是否支持该格式声音
+                    if ("" != Resources.Sound[m1].data.canPlayType('video/ogg')) {
+                        Resources.Sound[m1].data.src = GMain.URL + resources.Sound[m1].path + resources.Sound[m1].soundName + ".ogg";
+                    } else {
+                        Resources.Sound[m1].data.src = GMain.URL + resources.Sound[m1].path + resources.Sound[m1].soundName + ".mp3";
+                    }
+                    Resources.Sound[m1].data.addEventListener("canplaythrough", function () {
+                        that.audioLoadPost();
+                    }, false);
+                    Resources.Sound[m1].data.addEventListener("error", function () {
+                        console.log("资源加载失败！");
+                    }, false);
+                }
+            })();
+        }
+    },
+    loadJson: function loadJson(f) {
+        var _this3 = this;
+
+        //加载JSON
+        if (f) this.loadPost = f;
+        if (this.mapsNum == 0) {
+            this.loadedNum--;
+            this.jsonLoadPost();
+        } else {
+            (function () {
+                var that = _this3;
+
+                var _loop = function _loop(m2) {
+                    var request = new XMLHttpRequest();
+                    request.open("get", GMain.URL + Resources.Maps[m2].path);
+                    request.send(null);
+                    request.onload = function () {
+                        if (request.status == 200) {
+                            var json = JSON.parse(request.responseText);
+                            Resources.Maps[m2].data = json;
+                            that.jsonLoadPost();
+                        } else {
+                            console.log("资源加载错误！");
+                        }
+                    };
+                    request.onerror = function () {
+                        console.log("资源加载失败！");
+                    };
+                };
+
+                for (var m2 in Resources.Maps) {
+                    _loop(m2);
+                }
+            })();
+        }
+    }
+});
+
+module.exports = JPreLoad;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var JBase64 = {};
+
+JBase64._keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+JBase64.encode = function (e) {
+    var t = "";
+    var n = void 0,
+        r = void 0,
+        i = void 0,
+        s = void 0,
+        o = void 0,
+        u = void 0,
+        a = void 0;
+    var f = 0;
+    e = JBase64._utf8_encode(e);
+    while (f < e.length) {
+        n = e.charCodeAt(f++);
+        r = e.charCodeAt(f++);
+        i = e.charCodeAt(f++);
+        s = n >> 2;
+        o = (n & 3) << 4 | r >> 4;
+        u = (r & 15) << 2 | i >> 6;
+        a = i & 63;
+        if (isNaN(r)) {
+            u = a = 64;
+        } else if (isNaN(i)) {
+            a = 64;
+        }
+        t = t + JBase64._keyStr.charAt(s) + JBase64._keyStr.charAt(o) + JBase64._keyStr.charAt(u) + JBase64._keyStr.charAt(a);
+    }
+    return t;
+};
+
+JBase64.decode = function (e) {
+    var t = "";
+    var n = void 0,
+        r = void 0,
+        i = void 0;
+    var s = void 0,
+        o = void 0,
+        u = void 0,
+        a = void 0;
+    var f = 0;
+    e = e.replace(/[^A-Za-z0-9+/=]/g, "");
+    while (f < e.length) {
+        s = JBase64._keyStr.indexOf(e.charAt(f++));
+        o = JBase64._keyStr.indexOf(e.charAt(f++));
+        u = JBase64._keyStr.indexOf(e.charAt(f++));
+        a = JBase64._keyStr.indexOf(e.charAt(f++));
+        n = s << 2 | o >> 4;
+        r = (o & 15) << 4 | u >> 2;
+        i = (u & 3) << 6 | a;
+        t = t + String.fromCharCode(n);
+        if (u != 64) {
+            t = t + String.fromCharCode(r);
+        }
+        if (a != 64) {
+            t = t + String.fromCharCode(i);
+        }
+    }
+    t = JBase64._utf8_decode(t);
+    return t;
+};
+
+JBase64._utf8_encode = function (e) {
+    e = e.replace(/rn/g, "n");
+    var t = "";
+    for (var n = 0; n < e.length; n++) {
+        var r = e.charCodeAt(n);
+        if (r < 128) {
+            t += String.fromCharCode(r);
+        } else if (r > 127 && r < 2048) {
+            t += String.fromCharCode(r >> 6 | 192);
+            t += String.fromCharCode(r & 63 | 128);
+        } else {
+            t += String.fromCharCode(r >> 12 | 224);
+            t += String.fromCharCode(r >> 6 & 63 | 128);
+            t += String.fromCharCode(r & 63 | 128);
+        }
+    }
+    return t;
+};
+
+JBase64._utf8_decode = function (e) {
+    var t = "";
+    var n = 0;
+    var c1 = void 0,
+        c2 = void 0;
+    var r = c1 = c2 = 0;
+    while (n < e.length) {
+        r = e.charCodeAt(n);
+        if (r < 128) {
+            t += String.fromCharCode(r);
+            n++;
+        } else if (r > 191 && r < 224) {
+            c2 = e.charCodeAt(n + 1);
+            t += String.fromCharCode((r & 31) << 6 | c2 & 63);
+            n += 2;
+        } else {
+            c2 = e.charCodeAt(n + 1);
+            c3 = e.charCodeAt(n + 2);
+            t += String.fromCharCode((r & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+            n += 3;
+        }
+    }
+    return t;
+};
+
+module.exports = JBase64;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var JFunction = {};
+
+JFunction.IsMobile = function () {
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+    var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+    var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+    var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+    var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+    var bIsAndroid = sUserAgent.match(/android/i) == "android";
+    var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+    var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+    if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
+        return false;
+    }
+    return true;
+};
+
+JFunction.FullScreen = function () {
+    var el = document.documentElement;
+    var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (typeof rfs != "undefined" && rfs) {
+        rfs.call(el);
+    };
+    return;
+};
+
+JFunction.ExitFullScreen = function () {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    if (typeof cfs != "undefined" && cfs) {
+        cfs.call(el);
+    }
+};
+
+JFunction.IsFullscreen = function () {
+    return document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || false;
+};
+
+JFunction.GetElementById = function (name) {
+    var element = document.getElementById(name);
+    if (element == null) return false;
+    element.state = false;
+    element.show = function (e) {
+        this.state = true;
+        this.style.display = 'block';
+    };
+    element.hide = function (e) {
+        this.state = false;
+        this.style.display = 'none';
+    };
+    element.text = function (e) {
+        this.innerHTML = e;
+    };
+    element.attrbute = function (name, value) {
+        if (value == undefined) {
+            return this.getAttribute(name);
+        }
+        this.setAttribute(name, value);
+    };
+    element.append = function (e) {
+        this.appendChild(e);
+    };
+    element.remove = function (e) {
+        this.removeChild(e);
+    };
+    return element;
+};
+
+JFunction.Random = function (formNum, toNum) {
+    return parseInt(Math.random() * (toNum - formNum + 1) + formNum);
+};
+JFunction.setLSData = function (key, jsonValue) {
+    var data = JSON.stringify(jsonValue);
+    window.localStorage.setItem(key, JBase64.encode(data));
+};
+JFunction.getLSData = function (key) {
+    var data = window.localStorage.getItem(key);
+    if (data) {
+        data = JBase64.decode(window.localStorage.getItem(key));
+    }
+    return JSON.parse(data);
+};
+JFunction.getNowTime = function () {
+    var now = new Date();
+    var year = now.getFullYear(); //年
+    var month = now.getMonth() + 1; //月
+    var day = now.getDate(); //日
+    var hh = now.getHours(); //时
+    var mm = now.getMinutes(); //分
+    return year + "/" + month + "/" + day + " " + hh + ":" + mm;
+};
+
+//获取图片数据
+JFunction.getImageData = function (_context, _point, _size) {
+    return _context.getImageData(_point.x, _point.y, _size.width, _size.height);
+};
+//通过图片数据绘制图片
+JFunction.drawImageData = function (_context, _imgdata, _point, _dPoint, _dSize) {
+    if (!_dPoint) _dPoint = { x: 0, y: 0 };
+    if (!_dSize) _dSize = { width: _imgdata.width, height: _imgdata.height };
+    _context.putImageData(_imgdata, _point.x, _point.y, _dPoint.x, _dPoint.y, _dSize.width, _dSize.height);
+};
+//颜色反转
+JFunction.invert = function (_imgData) {
+    var imageData = _imgData;
+    for (var i = 0; i < imageData.data.length; i += 4) {
+        var red = imageData.data[i],
+            green = imageData.data[i + 1],
+            blue = imageData.data[i + 2],
+            alpha = imageData.data[i + 3];
+        imageData.data[i] = 255 - red;
+        imageData.data[i + 1] = 255 - green;
+        imageData.data[i + 2] = 255 - blue;
+        imageData.data[i + 3] = alpha;
+    }
+    return imageData;
+};
+//灰色
+JFunction.changeToGray = function (_imgData) {
+    var imageData = _imgData;
+    for (var i = 0; i < imageData.data.length; i += 4) {
+        var wb = parseInt((imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3);
+        imageData.data[i] = wb;
+        imageData.data[i + 1] = wb;
+        imageData.data[i + 2] = wb;
+    }
+    return imageData;
+};
+//加红
+JFunction.changeToRed = function (_imgData) {
+    var imageData = _imgData;
+    for (var i = 0; i < imageData.data.length; i += 4) {
+        imageData.data[i] += 50;
+        if (imageData.data[i] > 255) imageData.data[i] = 255;
+    }
+    return imageData;
+};
+//图片旋转
+JFunction.rotate = function (_context, _imageData, angle) {
+    var returnData = _context.createImageData(_imageData.width, _imageData.height);
+    var w = void 0,
+        h = void 0,
+        i = void 0,
+        j = void 0,
+        newPoint = void 0,
+        x = void 0,
+        y = void 0;
+    var centerX = _imageData.width / 2.0;
+    var centerY = _imageData.height / -2.0;
+    var PI = 3.14159;
+    for (h = 0; h < returnData.height; h++) {
+        for (w = 0; w < returnData.width; w++) {
+            i = (_imageData.width * h + w) * 4;
+            newPoint = GetNewPoint({ x: w, y: h * -1 });
+            x = parseInt(newPoint.x);
+            y = parseInt(newPoint.y);
+            if (x >= 0 && x < _imageData.width && -y >= 0 && -y < _imageData.height) {
+                j = (_imageData.width * -y + x) * 4;
+                returnData.data[i] = _imageData.data[j];
+                returnData.data[i + 1] = _imageData.data[j + 1];
+                returnData.data[i + 2] = _imageData.data[j + 2];
+                returnData.data[i + 3] = _imageData.data[j + 3];
+            }
+        }
+    }
+    return returnData;
+    function GetNewPoint(_point) {
+        var l = angle * PI / 180;
+        var newX = (_point.x - centerX) * Math.cos(l) - (_point.y - centerY) * Math.sin(l);
+        var newY = (_point.x - centerX) * Math.sin(l) + (_point.y - centerY) * Math.cos(l);
+        return { x: newX + centerX, y: newY + centerY };
+    }
+};
+//高亮整个图片
+JFunction.highLight = function (_imgData, n) {
+    var imageData = _imgData;
+    for (var i = 0; i < imageData.data.length; i += 4) {
+        imageData.data[i] = imageData.data[i] + n > 255 ? 255 : imageData.data[i] + n;
+        imageData.data[i + 1] = imageData.data[i + 1] + n > 255 ? 255 : imageData.data[i + 1] + n;
+        imageData.data[i + 2] = imageData.data[i + 2] + n > 255 ? 255 : imageData.data[i + 2] + n;
+    }
+    return imageData;
+};
+
+module.exports = JFunction;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var JColor = {
+    white: { data: "#FFFFFF", r: 255, g: 255, b: 255 },
+    black: { data: "#000000", r: 0, g: 0, b: 0 },
+    red: { data: "#cf3a01", r: 207, g: 58, b: 1 },
+    green: { data: "#7dbd5d", r: 125, g: 189, b: 93 },
+    blue: { data: "#2da0ec", r: 45, g: 160, b: 236 },
+    yellow: { data: "#fcce0e", r: 252, g: 206, b: 14 },
+    gray: { data: "#b8c7d1", r: 184, g: 199, b: 209 }
+};
+module.exports = JColor;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var JMain = {
+    JZoom: { x: 1.0, y: 1.0 },
+    JFocusControl: null,
+    JForm: null,
+    JTick: null,
+    JID: 0
+};
+module.exports = JMain;
+
+/***/ })
+/******/ ]);
