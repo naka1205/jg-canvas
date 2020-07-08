@@ -22,9 +22,7 @@ JButton = Class.create(JObject, {
             this.text.setSize({width:size.width,height:size.height});
         }
         return this;
-    },
-
-
+    }
 });
 
 module.exports = JButton;

@@ -29,28 +29,17 @@ JForm = Class.create(JObject, {//从父类继承
         this.canvas.onclick = function (event) {
             JMain.JForm.mousePosition = {x:parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y:parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y)};
             JMain.JForm.onControlClick.call(JMain.JForm);
-        };
+        }
+
         this.canvas.onmousedown = function (event) {
             JMain.JForm.mousePosition = {x:parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y:parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y)};
             JMain.JForm.onControlMouseDown.call(JMain.JForm);
-        };
+        }
+
         this.canvas.onmouseup = function (event) {
             JMain.JForm.mousePosition = {x:parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y:parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y)};
             JMain.JForm.onControlMouseUp.call(JMain.JForm);
-        };
-        // this.canvas.ontouchdown = function (event) {
-        //     event.pageX = event.pageX || event.changedTouches[0].pageX;
-        //     event.pageY = event.pageY || event.changedTouches[0].pageY;
-        //     JMain.JForm.mousePosition = {x:parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y:parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y)};
-        //     JMain.JForm.onControlMouseDown.call(JMain.JForm);
-        // };
-        // this.canvas.ontouchup = function (event) {
-        //     event.pageX = event.pageX || event.changedTouches[0].pageX;
-        //     event.pageY = event.pageY || event.changedTouches[0].pageY;
-        //     JMain.JForm.mousePosition = {x:parseInt((event.pageX - JMain.JForm.webPosition.x) / JMain.JZoom.x), y:parseInt((event.pageY - JMain.JForm.webPosition.y) / JMain.JZoom.y)};
-        //     JMain.JForm.onControlMouseUp.call(JMain.JForm);
-        // };
-
+        }
 
         this.canvas.addEventListener('touchstart', function(event) {
             event.pageX = event.pageX || event.changedTouches[0].pageX;
@@ -70,12 +59,13 @@ JForm = Class.create(JObject, {//从父类继承
             event = window.event || event;
             let keyCode = event.keyCode || event.which;
             JMain.JForm.onControlKeyDown(keyCode);
-        };
+        }
+
         document.onkeyup = function (event) {
             event = window.event || event;
             let keyCode = event.keyCode || event.which;
             JMain.JForm.onControlKeyUp(keyCode);
-        };
+        }
 
     }
 });
