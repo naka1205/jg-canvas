@@ -1,4 +1,4 @@
-# JG-Canavs
+# JG-Canvas
 
 canvas game
 
