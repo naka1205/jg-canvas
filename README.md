@@ -5,5 +5,5 @@ canvas game
 ### 安装
 
 ```js
-npm install jgcanvas
+npm install --save jgcanvas
 ```
